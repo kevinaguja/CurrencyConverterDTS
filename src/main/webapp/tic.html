@@ -1,94 +1,87 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-<!DOCUMENT html>
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Tic Tac Toe</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/style.css">
-<style type="text/css" media="screen">
-  img{
-    margin:0;
-    padding:0;
+  <title></title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+  <style type="text/css" media="screen">
+  .dots{
+    display:inline-block;
+    background:green;
+    height:100px;
+    width:100px;
+    border: 10px solid green;
+  }
+  .dots2{
+    display:inline-block;
+    background:#edd299;
+    height:100px;
+    width:100px;
   }
 
   td {
-    border: 0px solid transparent;
+    border: 1px solid rgba(255,255,255, 1);
     height: 100px;
     width: 100px;
     border-style: solid;
     border-width: 15px;
     background-color: black;
-    padding:0px;
   }
 
   #minimax{
     font-size: 7em;
-    color: white;
   }
 
   html{
     width:100%;
     height:100%;
+    background-image: url("bgtc.jpg");
+    background-size: 100% 100%;
     text-shadow: 1px 1px 2px grey;
-    background-image: url('circle.gif');
-    background-position: bottom left;
-    background-repeat: no-repeat;
-    background-color: black;
-  }
-
-  body{
-    background-image: url('spinner.gif');
-    background-size: 20% 200%;
-    background-repeat: no-repeat;
-    background-position: bottom right;
-    background-color: transparent;
   }
 
   body, .container-fluid{
-    background-color: transparent;
-  }
-
-  #board{
-    background-image: url('bg.jpg');
-    background-size: 100% 100%;
-  }
-
-  #board td{
     background-color: transparent;
   }
   </style>
 </head>
 <body>
 <div class= "container-fluid text-center">
-  <div class="ccontainer">  
+  <div class="col-md-5">  
     <div class="jumbotron" style="background-color: transparent; padding-bottom: 0px">
-      <h1><b id="choose_prompt" style="color: #FFF">AI Simulation using Minimax Algorithm</b></h1>
+      <h1><b id="choose_prompt" style="color: #FFF">choose</b></h1>
       <h1><b id="selected" style="text-shadow: none"></b></h1>
     </div>
-    <div class="col-md-12 text-center" style="padding-bottom: 100px">
-      <div style="display:inline-block" id="board">
+    <div class = "guys">
+      <div class= "dots">
+      </div> 
+
+      <div class= "dots2">
+      </div>
+    </div>
+    <div class="col-md-12 text-center">
+      <div style="display:inline-block">
         <table>
           <tr>
-              <td class = "cell" id = "0"><img src="black.jpg" width=0 height=0></td>
-              <td class = "cell" id = "1"><img src="black.jpg" width=0 height=0></td>
-              <td class = "cell" id = "2"><img src="black.jpg" width=0 height=0></td>
+              <td class = "cell" id = "0"></td>
+              <td class = "cell" id = "1"></td>
+              <td class = "cell" id = "2"></td>
           </tr>
           <tr>
-              <td class = "cell" id = "3"><img src="black.jpg" width=0 height=0></td>
-              <td class = "cell" id = "4"><img src="black.jpg" width=0 height=0></td>
-              <td class = "cell" id = "5"><img src="black.jpg" width=0 height=0></td>
+              <td class = "cell" id = "3"></td>
+              <td class = "cell" id = "4"></td>
+              <td class = "cell" id = "5"></td>
           </tr>
           <tr>
-              <td class = "cell" id = "6"><img src="black.jpg" width=0 height=0></td>
-              <td class = "cell" id = "7"><img src="black.jpg" width=0 height=0></td>
-              <td class = "cell" id = "8"><img src="black.jpg" width=0 height=0></td>
+              <td class = "cell" id = "6"></td>
+              <td class = "cell" id = "7"></td>
+              <td class = "cell" id = "8"></td>
           </tr>
       </table>
       </div>
     </div>
 
-    <div class="jumbotron" style="background-color: transparent; padding-bottom: 0px;">
+    <div class="jumbotron" style="background-color: transparent; padding-bottom: 0px">
       <b><span id="minimax" style="text-shadow: none">0</span></b>
     </div>
     <h3 class="" style="color: white">Latest Minimax Rating</h3>
@@ -97,9 +90,27 @@
 
 <script>
 $(document).ready(function() {
-  $("td").click(function() {
-    move(this, huPlayer, symbolPl);
+  $(".dots").click(function() {
+    $("td").css("background-color", "transparent");
+    $(".guys").fadeOut();
+    $("#choose_prompt").text("You chose");
+    $("#selected").css("color","green");
+    $("#selected").text("GREEN!!!");
+    aiCo = "#edd299";
+    huCo = "green";
   });
+  $(".dots2").click(function() {
+    $("td").css("background-color", "transparent");
+    $(".guys").fadeOut();
+    $("#choose_prompt").text("You chose");
+    $("#selected").css("color","#edd299");
+    $("#selected").text("YELLOW!!!");
+  });
+
+  $("td").click(function() {
+    move(this, huPlayer, huCo);
+  });
+
 });
 var board = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 var huPlayer = "P";
@@ -109,16 +120,12 @@ var round = 0;
 var huCo = "#edd299";
 var aiCo = "green";
 var rating= 0;
-var symbolPl= 'y.jpg';
-var symbolAi= 'x.jpg';
 
-function move(element, player, symbol) {
+function move(element, player, color) {
   if (board[element.id] != "P" && board[element.id] != "C") {
     round++;
-    $(element).find('img').attr('src', symbol);
-    $(element).find('img').animate({'width':'80', 'height':'80'}, 300);
-    setTimeout(function(){
-      board[element.id] = player;
+    $(element).css("background-color", color);
+    board[element.id] = player;
 
     if (winning(board, player)) {
       setTimeout(function() {
@@ -135,11 +142,14 @@ function move(element, player, symbol) {
     } else {
       round++;
       var index = minimax(board, aiPlayer).index;
+    if(rating==0){
+    $('#minimax').css("color","green");
+    }else{
+    $('#minimax').css("color","red");
+    }
     $('#minimax').text(minimax(board, aiPlayer).score);
-    var selector = "#" + index;
-    $('#minimax').text(minimax(board, aiPlayer).score);
-    $(selector).find('img').attr('src', symbolAi);
-    $(selector).find('img').animate({'width':'80', 'height':'80'}, 300);
+      var selector = "#" + index;
+      $(selector).css("background-color", aiCo);
       board[index] = aiPlayer;
       if (winning(board, aiPlayer)) {
         setTimeout(function() {
@@ -155,16 +165,13 @@ function move(element, player, symbol) {
         return;
       }
     }
-    }, 300);    
   }
 }
 
 function reset() {
   round = 0;
   board = [0, 1, 2, 3, 4, 5, 6, 7, 8];
-  $("td img").animate({'width':'0', 'height':'0'}, 1000, function(){
-    $("td img").attr('src', 'black.jpg');
-  });
+  $("td").css("background-color", "transparent");
 }
 
 function minimax(reboard, player) {
@@ -219,6 +226,9 @@ function minimax(reboard, player) {
       }
     }
   }
+  setTimeout(function(){
+    $('#minimax').text(moves[bestMove].score);
+  },50);
   return moves[bestMove];
 }
 
@@ -243,12 +253,5 @@ function winning(board, player) {
   }
 }
 </script>
-</body>
-</html>
-	
-	
-	
-	
-<script type="javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"> </script>
 </body>
 </html>
